@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.blur-bg {
+  @apply bg-white bg-opacity-30 backdrop-filter backdrop-blur-lg;
+}

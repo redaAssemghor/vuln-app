@@ -1,5 +1,9 @@
+import Header from "./components/Header";
+
 export default function Home() {
   return (
-    <main className="flex items-center justify-center h-screen">main</main>
+    <main className="bg-blue-600 h-screen">
+      <Header />
+    </main>
   );
 }
