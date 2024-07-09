@@ -8,7 +8,7 @@ const images = [
 ];
 const Hero = () => {
   return (
-    <main className="h-full">
+    <main className="h-screen">
       <ImagesSlider images={images}>
         <div className="z-50 flex flex-col items-center justify-center">
           <h1 className="text-white lg:text-6xl text-2xl">
