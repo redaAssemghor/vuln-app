@@ -70,16 +70,34 @@ const sliderImages = [
 const ImageSlider: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const imagesRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
     if (imagesRef.current) {
       gsap.to(imagesRef.current, {
-        x: `-${currentIndex * 100}%`,
+        x: `-${currentIndex * 89}%`,
         duration: 1,
         ease: "power2.inOut",
       });
     }
   }, [currentIndex]);
+
+  useGSAP(() => {
+    const tl = gsap.timeline({ paused: true });
+    const container = containerRef.current;
+
+    tl.from(".btn-left", { opacity: 0, x: 20, scale: 0.5, duration: 0.5 }, 0)
+      .from(".btn-right", { opacity: 0, x: -20, scale: 0.2, duration: 0.5 }, 0)
+      .from(".arrow-left", { x: 20, duration: 0.5, scale: 0.5 }, 0)
+      .from(".arrow-right", { x: -20, duration: 0.2, scale: 0.5 }, 0);
+
+    const handleMouseEnter = () => tl.restart();
+    const handleMouseLeave = () => tl.reverse();
+    if (container) {
+      container.addEventListener("mouseenter", handleMouseEnter);
+      container.addEventListener("mouseleave", handleMouseLeave);
+    }
+  }, []);
 
   const handlePrev = () => {
     setCurrentIndex((prevIndex) =>
@@ -94,10 +112,13 @@ const ImageSlider: React.FC = () => {
   };
 
   return (
-    <div className="relative w-screen h-screen overflow-hidden">
-      <div ref={imagesRef} className="flex w-full h-full">
+    <div
+      ref={containerRef}
+      className="relative w-screen h-screen overflow-hidden"
+    >
+      <div ref={imagesRef} className="flex w-full h-full gap-2">
         {sliderImages.map((image, index) => (
-          <div key={index} className="min-w-full h-full relative">
+          <div key={index} className="min-w-[90%] h-full relative">
             <Image
               width={1000}
               height={1000}
@@ -117,15 +138,15 @@ const ImageSlider: React.FC = () => {
       </div>
       <button
         onClick={handlePrev}
-        className="absolute left-5 text-2xl top-1/2 transform -translate-y-1/2 p-2 rounded-full h-14 w-14 font-bold bg-black bg-opacity-50 text-white"
+        className="btn-left flex items-center justify-center absolute left-5 text-sm top-1/2 transform -translate-y-1/2 p-2 rounded-full h-10 w-10 font-bold bg-black bg-opacity-50 text-white"
       >
-        &lt;
+        <span className="arrow-left">←</span>
       </button>
       <button
         onClick={handleNext}
-        className="absolute right-5 text-2xl top-1/2 transform -translate-y-1/2 p-2 rounded-full h-14 w-14 font-bold bg-black bg-opacity-50 text-white"
+        className="btn-right flex items-center justify-center absolute right-5 text-sm top-1/2 transform -translate-y-1/2 p-2 rounded-full h-10 w-10 font-bold bg-black bg-opacity-50 text-white"
       >
-        &gt;
+        <span className="arrow-right">→</span>
       </button>
     </div>
   );
